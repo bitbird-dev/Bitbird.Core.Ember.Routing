@@ -1,9 +1,12 @@
 import Ember from 'ember';
 import Route from './route';
 import DS from 'ember-data';
+import { inject as service } from '@ember/service';
 
 export default Route.extend({
   routeIsProtected: true,
+
+  session: service(),
 
   beforeModel: function(transition) {
     let ctrl = this.controllerFor('login'),
@@ -13,14 +16,15 @@ export default Route.extend({
       ctrl = Ember.generateController(this.get('container'), 'login');
     }
 
-    let verifyInProgress = this.session.get('verifyInProgress'),
-      isLoggedIn = this.session.get('isLoggedIn');
+    let session = this.get('session'),
+      verifyInProgress = session.get('verifyInProgress'),
+      isLoggedIn = session.get('isLoggedIn');
 
     if(routeIsProtected && !isLoggedIn)
     {
       let verifyCallback = function() {
-        this.session.removeObserver('verifyInProgress', this, verifyCallback);
-        if(this.session.get('isLoggedIn'))
+        session.removeObserver('verifyInProgress', this, verifyCallback);
+        if(session.get('isLoggedIn'))
         {
           //Continue with original transition
           if (transition) {
@@ -43,7 +47,7 @@ export default Route.extend({
         {
           transition.abort();
         }
-        this.session.addObserver('verifyInProgress', this, verifyCallback);
+        session.addObserver('verifyInProgress', this, verifyCallback);
       } else {
         this.transitionTo('login', {
           queryParams: { redirect:document.location.pathname }
