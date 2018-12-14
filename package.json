@@ -1,6 +1,6 @@
 {
   "name": "bitbird-core-ember-routing",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "The default blueprint for ember-cli addons.",
   "keywords": [
     "ember-addon"
@@ -24,7 +24,7 @@
     "ember-cli-babel": "^6.6.0"
   },
   "devDependencies": {
-    "bitbird-core-ember-i18n": "^1.0.14",
+    "bitbird-core-ember-i18n": "^1.0.15",
     "bitbird-core-ember-remote": "^1.0.9",
     "broccoli-asset-rev": "^2.4.5",
     "ember-ajax": "^3.0.0",
