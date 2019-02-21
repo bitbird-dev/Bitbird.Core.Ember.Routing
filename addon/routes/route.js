@@ -55,7 +55,8 @@ export default Route.extend(Messages, {
 
   actions: {
     willTransition(transition) {
-      let model = this.controller.get('model');
+      //let model = this.controller.get('model');
+      let model = this.controllerFor(transition.from.name).get('model');
 
       if(!model || !model.get) return true;
 
