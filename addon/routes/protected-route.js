@@ -29,8 +29,7 @@ export default Route.extend({
       ctrl = Ember.generateController(this.get('container'), 'login');
     }*/
 
-    let self = this,
-      session = this.get('session'),
+    let session = this.get('session'),
       verifyInProgress = session.get('verifyInProgress'),
       isLoggedIn = session.get('isLoggedIn');
 
@@ -46,10 +45,10 @@ export default Route.extend({
           }
           // Default back to homepage
           else {
-            self.transitionToRoute(self.get('_redirectSuccessRoute'));
+            this.transitionTo(this.get('_redirectSuccessRoute'));
           }
         } else {
-          self.transitionTo(self.get('_redirectErrorRoute'), {
+          this.transitionTo(this.get('_redirectErrorRoute'), {
             queryParams: { redirect:document.location.pathname }
           });
         }
