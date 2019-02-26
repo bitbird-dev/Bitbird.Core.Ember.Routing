@@ -53,25 +53,47 @@ export default Route.extend(Messages, {
     this.notifyPropertyChange('routeClassName');
   }),
 
+  environement: computed(function() {
+    return getOwner(this).resolveRegistration('config:environment');
+  }),
+
+  _routeToNotify: computed('environement', function() {
+    return this.get('environement.changeTracker.routeToNotify') || 'application';
+  }),
+
   actions: {
     willTransition(transition) {
+      let mountPointRouteName = getOwner(this).mountPoint,
+        fromRouteRouteName = transition.from.name;
+
+      if(fromRouteRouteName && mountPointRouteName) {
+        fromRouteRouteName = fromRouteRouteName.substr(mountPointRouteName.length+1);
+      }
+
+      if(getOwner(this).lookup(`route:${fromRouteRouteName}`) === undefined) {
+        return true;
+      }
+
       //let model = this.controller.get('model');
-      let model = this.controllerFor(transition.from.name).get('model');
+      let model = this.controllerFor(fromRouteRouteName).get('model');
 
       if(!model || !model.get) return true;
 
       let isDirty = model.get('isDirty'),
         isDeleted = model.get('isDeleted'),
-        routesController = getOwner(this).lookup('controller:realms');
+        routeToNotify = getOwner(this).lookup(`route:${this.get('_routeToNotify')}`);
 
       // Notify routes-route that we're about to loose unsaved changes
       if (isDirty && !isDeleted) {
         transition.abort();
-        routesController.set('onCancelRouteChange', function() {});
-        routesController.set('onRevertBeforeRouteChange', function() {
-          model.rollback();
-          transition.retry();
-        });
+        if(routeToNotify)
+        {
+          routeToNotify.set('onCancelRouteChange', function() {});
+          routeToNotify.set('onRevertBeforeRouteChange', function() {
+            model.rollback();
+            transition.retry();
+          });
+        }
       } else {
         return true;
       }
