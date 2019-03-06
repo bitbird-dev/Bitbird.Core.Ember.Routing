@@ -86,13 +86,18 @@ export default Route.extend(Messages, {
       // Notify routes-route that we're about to loose unsaved changes
       if (isDirty && !isDeleted) {
         transition.abort();
-        if(routeToNotify)
+        if(routeToNotify && routeToNotify.get('controller'))
         {
-          routeToNotify.set('onCancelRouteChange', function() {});
-          routeToNotify.set('onRevertBeforeRouteChange', function() {
+          routeToNotify.get('controller').set('onCancelRouteChange', function() {});
+          routeToNotify.get('controller').set('onRevertBeforeRouteChange', function() {
             model.rollback();
             transition.retry();
           });
+        } else {
+          if(confirm('Änderungen verwerfen?')) {
+            model.rollback();
+            transition.retry();
+          }
         }
       } else {
         return true;

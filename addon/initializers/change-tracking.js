@@ -418,22 +418,24 @@ export function initialize(/* application */) {
     ready() {
       //console.log("ready: " + this.constructor.modelName + " " + this.get('id'));
       this.reset();
-
       this._super(...arguments);
     },
 
     didCreate() {
       //console.log("didCreate: " + this.constructor.modelName + " " + this.get('id'));
       this.reset();
+      this._super(...arguments);
     },
 
     didUpdate() {
       this.reset();
+      this._super(...arguments);
     },
 
     didLoad() {
       //console.log("didLoad: " + this.constructor.modelName + " " + this.get('id'));
       this.reset();
+      this._super(...arguments);
     },
 
     didDelete() {
@@ -445,6 +447,8 @@ export function initialize(/* application */) {
 
       this.set('changedAttributeKeys', A());
       this.set('changedRelationKeys', A());
+
+      this._super(...arguments);
     },
 
     init:function() {
