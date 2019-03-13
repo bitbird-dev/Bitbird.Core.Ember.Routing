@@ -382,6 +382,24 @@ export function initialize(/* application */) {
       return Array.isArray(this.get('internalChangeTrackingOptions.deep')) && this.get('internalChangeTrackingOptions.deep').indexOf(name) >= 0;
     },
 
+    /**
+     * Returns an object with only that values that have been changed
+     * @returns {Object}
+     */
+    getChanges() {
+      let self = this,
+        changedKeys = this.changedKeys,
+        changeSet = {};
+      changedKeys.forEach(function(key) {
+        if(self._trackedAttributes[key] !== undefined) {
+          changeSet[key] = self._trackedAttributes[key];
+        } else if(self._trackedRelations[key] !== undefined) {
+          changeSet[key] = self._trackedRelations[key];
+        }
+      });
+      return changeSet;
+    },
+
     reset() {
       //Reset attributes
       this._trackedAttributes = {};
