@@ -14,6 +14,7 @@ export default Route.extend({
   _redirectSuccessRoute: computed('environment', function() {
     return this.get('environment.security.defaultSuccessRoute') || 'realms';
   }),
+
   _redirectErrorRoute: computed('environment', function() {
     return this.get('environment.security.defaultErrorRoute') || 'login';
   }),
@@ -44,9 +45,10 @@ export default Route.extend({
             transition.retry();
           }
           // Default back to homepage
-          else {
+          //potentially not needed?
+          /*else {
             this.transitionTo(this.get('_redirectSuccessRoute'));
-          }
+          }*/
         } else {
           this.transitionTo(this.get('_redirectErrorRoute'), {
             queryParams: { redirect:document.location.pathname }
