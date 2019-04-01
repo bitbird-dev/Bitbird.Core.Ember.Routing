@@ -122,7 +122,7 @@ export function initialize(/* application */) {
           let reference = this.hasMany(name),
             relationship = reference.hasManyRelationship;
 
-          if(relationship.hasAnyRelationshipData) {//.hasLoaded) {
+          if((relationship.isAsync && (relationship.hasAnyRelationshipData || relationship.relationshipIsEmpty)) || !relationship.isAsync) {//.hasLoaded) {
             this.__hasManyIsReady.call(this, name);
             this.addObserver(`${name}.@each`, this, '__hasManyRelationDidChange');
             this.addObserver(`${name}.length`, this, '__hasManyRelationDidChange');
