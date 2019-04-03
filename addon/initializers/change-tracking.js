@@ -120,9 +120,10 @@ export function initialize(/* application */) {
         }
         else if(meta.kind === "hasMany") {
           let reference = this.hasMany(name),
-            relationship = reference.hasManyRelationship;
+            relationship = reference.hasManyRelationship,
+            isFulfilled = this.get(`${name}.isFulfilled`);
 
-          if((relationship.isAsync && (relationship.hasAnyRelationshipData || relationship.relationshipIsEmpty)) || !relationship.isAsync) {//.hasLoaded) {
+          if((relationship.isAsync && isFulfilled && (relationship.hasAnyRelationshipData || relationship.relationshipIsEmpty)) || !relationship.isAsync) {//.hasLoaded) {
             this.__hasManyIsReady.call(this, name);
             this.addObserver(`${name}.@each`, this, '__hasManyRelationDidChange');
             this.addObserver(`${name}.length`, this, '__hasManyRelationDidChange');
@@ -154,6 +155,7 @@ export function initialize(/* application */) {
 
       this.__hasManyIsReady.call(this, key);
       this.addObserver(`${key}.@each`, this, '__hasManyRelationDidChange');
+      this.addObserver(`${key}.length`, this, '__hasManyRelationDidChange');
       if(canDeepTrackProperty)
       {
         this.addObserver(`${key}.@each.isDirty`, this, '__hasManyRelationDidChange');
