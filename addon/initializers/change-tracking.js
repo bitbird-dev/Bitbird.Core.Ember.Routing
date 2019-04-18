@@ -120,10 +120,10 @@ export function initialize(/* application */) {
         }
         else if(meta.kind === "hasMany") {
           let reference = this.hasMany(name),
-            relationship = reference.hasManyRelationship,
-            isFulfilled = this.get(`${name}.isFulfilled`);
+            relationship = reference.hasManyRelationship;
 
-          if((relationship.isAsync && isFulfilled && (relationship.hasAnyRelationshipData || relationship.relationshipIsEmpty)) || !relationship.isAsync) {//.hasLoaded) {
+          //reference.value() checks if relationship is already loaded
+          if((relationship.isAsync && reference.value() !== null && (relationship.hasAnyRelationshipData || relationship.relationshipIsEmpty)) || !relationship.isAsync) {//.hasLoaded) {
             this.__hasManyIsReady.call(this, name);
             this.addObserver(`${name}.@each`, this, '__hasManyRelationDidChange');
             this.addObserver(`${name}.length`, this, '__hasManyRelationDidChange');
