@@ -11,10 +11,20 @@ export default Route.extend({
     return getOwner(this).resolveRegistration('config:environment');
   }),
 
+  /**
+   * Redirect route on success
+   * Example: 'login'
+   * Example: { name: 'login', external: true }
+   */
   _redirectSuccessRoute: computed('environment', function() {
     return this.get('environment.security.defaultSuccessRoute') || 'realms';
   }),
 
+  /**
+   * Redirect route on errors
+   * Example: 'login'
+   * Example: { name: 'login', external: true }
+   */
   _redirectErrorRoute: computed('environment', function() {
     return this.get('environment.security.defaultErrorRoute') || 'login';
   }),
