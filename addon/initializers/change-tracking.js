@@ -1,9 +1,9 @@
-import Ember from 'ember'
 import DS from 'ember-data'
 const _UNSET = {};
 import { A } from '@ember/array';
 import { computed } from '@ember/object';
 import { isPresent, isEmpty } from '@ember/utils';
+import { warn } from '@ember/debug';
 
 export function initialize(/* application */) {
   DS.Model.reopen({
@@ -358,7 +358,7 @@ export function initialize(/* application */) {
           source = this.get('internalChangeTrackingOptions.hasMany');
           break;
         default:
-          Ember.Logger.warn(`Invalid tracking kind "${source}"`);
+          warn(`Invalid tracking kind "${source}"`);
           break;
       }
 
